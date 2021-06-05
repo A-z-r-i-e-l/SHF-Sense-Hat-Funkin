@@ -11,10 +11,12 @@ running = True
 sense =  SenseHat()
 sense.clear()
 
-
+#anvil.server.connect("HRXTGORCZLCXB5C2FND7JDU6-ZIDVXGCRNZ4ONHO4")
 
 class arrow:
     def __init__(self):
+        q = random.randint(0, 2)
+        sleep(q)
         self.y_position = 7
         self.x_position = random.randint(0, 3)
         print("An arrow has been made")
@@ -29,13 +31,27 @@ class arrow:
         else:
             None
 
+
     def run(self):
+        global score
         r = (255, 200, 21)
+        if self.y_position==0:
+            score -= 1
+            r = ((0, 0, 0))
+            #self.display(r)
+            #self.y_position= -1
         self.display(r)
         time.sleep(1)
         k = (0, 0, 0)
         self.display(k)
         self.move()
+
+def makearrow ():
+    arrowarray = []
+    for i in range(10):
+        o = arrow()
+        arrowarray.append(o)
+    return arrowarray
 
 #----------------------------------------------------------------------------------
 class Catcher1:
@@ -123,15 +139,16 @@ class Catcher4:
         self.display(g)
         #print(event)        
 
-
-my_arrow = arrow()
+arrowcount = 0
+arrowlist = makearrow()
+my_arrow = arrowlist[arrowcount]
 my_catcher1 = Catcher1()
 my_catcher2 = Catcher2()
 my_catcher3 = Catcher3()
 my_catcher4 = Catcher4()
 score = 0
 
-while running == True:
+while arrowcount < len(arrowlist):
     my_arrow.run()
     my_catcher1.run()
     my_catcher2.run()
@@ -142,21 +159,29 @@ while running == True:
             score += 1
             print(score)
             time.sleep(1)
-            my_arrow = arrow()
+            arrowcount += 1
+            my_arrow = arrowlist[arrowcount]
         
         if (event.action == "pressed" and event.direction == "up") and (my_arrow.y_position == my_catcher2.y_position):
             score += 1
             print(score)
             time.sleep(1)
-            my_arrow = arrow()
+            arrowcount += 1
+            my_arrow = arrowlist[arrowcount]
+
         if (event.action == "pressed" and event.direction == "down") and (my_arrow.y_position == my_catcher3.y_position):
             score += 1
             print(score)
             time.sleep(1)
-            my_arrow = arrow()
+            arrowcount += 1
+            my_arrow = arrowlist[arrowcount]
         
         if (event.action == "pressed" and event.direction == "right") and (my_arrow.y_position == my_catcher4.y_position):
             score += 1
             print(score)
             time.sleep(1)
-            my_arrow = arrow()
+            arrowcount += 1
+            my_arrow = arrowlist[arrowcount]
+
+
+new_row = app_tables.scores.add_row(score=score)
